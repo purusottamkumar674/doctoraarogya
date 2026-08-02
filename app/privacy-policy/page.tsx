@@ -16,9 +16,7 @@ export default function PrivacyPolicyPage() {
 
       <section className="section max-w-3xl space-y-6 py-16 text-slateBlue md:py-20">
         <p>
-          {clinic.name} (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) respects your privacy.
-          This policy explains what information we collect through this website and how it is
-          used.
+          {`${clinic.name} ("we", "our", "us") respects your privacy. This policy explains what information we collect through this website and how it is used.`}
         </p>
 
         <h2 className="text-xl font-bold text-navy">
