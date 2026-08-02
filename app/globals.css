@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper font-body text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+  }
+
+  ::selection {
+    background-color: #33a1ff;
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #33a1ff;
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-sky;
+  }
+
+  .section {
+    @apply mx-auto max-w-content px-5 md:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-green px-6 py-3 font-heading text-sm font-semibold text-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-greenDark hover:shadow-lift active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-navy bg-transparent px-6 py-3 font-heading text-sm font-semibold text-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-navy hover:text-white active:scale-[0.98];
+  }
+
+  .btn-outline-white {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/70 bg-white/10 px-6 py-3 font-heading text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-navy active:scale-[0.98];
+  }
+
+  .card {
+    @apply rounded-xl2 border border-line bg-white shadow-card;
+  }
+
+  .reveal {
+    opacity: 0;
+  }
+
+  .reveal.is-visible {
+    animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .pulse-btn {
+    animation: pulseGlow 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+  }
+}
