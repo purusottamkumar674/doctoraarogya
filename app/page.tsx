@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import HeroSlider from "@/components/HeroSlider";
 import Reveal from "@/components/Reveal";
@@ -29,11 +30,14 @@ const whyChooseIcons = [
 
 export default function HomePage() {
   return (
-    <>
+    <div
+      className="relative min-h-screen w-full bg-cover bg-center bg-no-repeat bg-fixed"
+      style={{ backgroundImage: "url('/bg.png')" }}
+    >
       <HeroSlider />
 
       {/* quick stats strip */}
-      <section className="border-b border-line bg-white py-8">
+      <section className="border-b border-line bg-white/90 backdrop-blur-sm py-8">
         <div className="section flex flex-wrap items-center justify-between gap-6">
           <Counter end={12} suffix="+" label="Years Experience" />
           <Counter end={8400} suffix="+" label="Patients Treated" />
@@ -76,7 +80,7 @@ export default function HomePage() {
       </section>
 
       {/* CONDITIONS WE TREAT */}
-      <section className="border-y border-line bg-white py-16 md:py-20">
+      <section className="border-y border-line bg-white/90 backdrop-blur-sm py-16 md:py-20">
         <div className="section">
           <Reveal>
             <p className="eyebrow mb-3">Conditions We Treat</p>
@@ -124,10 +128,21 @@ export default function HomePage() {
       <section className="border-y border-line bg-navy py-16 text-white md:py-20">
         <div className="section grid items-center gap-12 md:grid-cols-[0.8fr_1.2fr]">
           <Reveal>
-            <div className="mx-auto flex h-64 w-full max-w-xs items-center justify-center rounded-xl2 bg-white/10 backdrop-blur-sm md:h-72">
-              <div className="text-center">
-                <span className="font-heading text-xl font-bold">{clinic.doctorName}</span>
-                <p className="mt-1 text-xs font-medium uppercase tracking-widest text-skyLight">
+            {/* Box with about.png Image */}
+            <div className="relative mx-auto flex h-72 w-full max-w-xs items-end overflow-hidden rounded-xl2 bg-white/10 shadow-lg md:h-80">
+              <Image
+                src="/about.png"
+                alt={clinic.doctorName}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 320px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/30 to-transparent" />
+              <div className="relative z-10 w-full p-4 text-center">
+                <span className="font-heading text-lg font-bold text-white drop-shadow-sm sm:text-xl">
+                  {clinic.doctorName}
+                </span>
+                <p className="mt-1 text-xs font-medium uppercase tracking-wider text-skyLight drop-shadow-sm">
                   {clinic.doctorRole}
                 </p>
               </div>
@@ -177,7 +192,7 @@ export default function HomePage() {
       </section>
 
       {/* PATIENT REVIEWS */}
-      <section className="border-y border-line bg-white py-16 md:py-20">
+      <section className="border-y border-line bg-white/90 backdrop-blur-sm py-16 md:py-20">
         <div className="section">
           <Reveal>
             <p className="eyebrow mb-3">Patient Reviews</p>
@@ -241,6 +256,6 @@ export default function HomePage() {
           </Reveal>
         </div>
       </section>
-    </>
+    </div>
   );
 }

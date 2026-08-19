@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import PageBanner from "@/components/PageBanner";
 import Reveal from "@/components/Reveal";
 import { clinic } from "@/lib/data";
@@ -31,15 +32,18 @@ export default function AboutPage() {
       <PageBanner title={`About ${clinic.doctorName}`} crumbs={[{ href: "/about", label: "About Doctor" }]} />
 
       {/* Profile */}
-      <section className="section grid gap-12 py-16 md:grid-cols-[0.85fr_1.15fr] md:py-20">
+      <section className="section grid items-center gap-12 py-16 md:grid-cols-[1fr_1.2fr] md:py-20">
         <Reveal>
-          <div className="mx-auto flex h-72 w-full max-w-sm items-center justify-center rounded-xl2 bg-navy text-white">
-            <div className="text-center">
-              <span className="font-heading text-2xl font-bold">{clinic.doctorName}</span>
-              <p className="mt-1 text-xs font-medium uppercase tracking-widest text-skyLight">
-                {clinic.doctorRole}
-              </p>
-            </div>
+          {/* Bigger image box */}
+          <div className="relative mx-auto h-96 w-full max-w-md overflow-hidden rounded-xl2 bg-navy shadow-xl md:h-[460px]">
+            <Image
+              src="/about.png"
+              alt={`${clinic.doctorName}, ${clinic.doctorRole}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 480px"
+              className="object-cover object-top"
+              priority
+            />
           </div>
         </Reveal>
         <Reveal delayMs={100}>

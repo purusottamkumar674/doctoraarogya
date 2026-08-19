@@ -1,17 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { clinic, heroSlides } from "@/lib/data";
 
 const AUTOPLAY_MS = 5500;
 
-const slideGradients = [
-  "linear-gradient(135deg, #0F3D6E 0%, #14539A 55%, #33A1FF 100%)",
-  "linear-gradient(135deg, #0A2A4D 0%, #0F3D6E 50%, #1E6FB8 100%)",
-  "linear-gradient(135deg, #123A63 0%, #1B5C9C 55%, #33A1FF 100%)",
-  "linear-gradient(135deg, #0F3D6E 0%, #1B5C9C 50%, #28A745 130%)",
-];
+const slideImages = ["/header1.png", "/header2.png", "/header3.png", "/header4.png", "/header5.png"];
 
 export default function HeroSlider() {
   const [active, setActive] = useState(0);
@@ -26,9 +22,12 @@ export default function HeroSlider() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
-  const goTo = useCallback((index: number) => {
-    setActive(((index % total) + total) % total);
-  }, [total]);
+  const goTo = useCallback(
+    (index: number) => {
+      setActive(((index % total) + total) % total);
+    },
+    [total]
+  );
 
   const next = useCallback(() => goTo(active + 1), [active, goTo]);
   const prev = useCallback(() => goTo(active - 1), [active, goTo]);
@@ -47,6 +46,7 @@ export default function HeroSlider() {
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
   }
+
   function handleTouchEnd(e: React.TouchEvent) {
     if (touchStartX.current === null) return;
     const delta = e.changedTouches[0].clientX - touchStartX.current;
@@ -58,7 +58,7 @@ export default function HeroSlider() {
 
   return (
     <section
-      className="relative h-[62vh] min-h-[480px] w-full overflow-hidden md:h-[78vh]"
+      className="relative min-h-[580px] h-[85vh] w-full overflow-hidden bg-slate-950 md:h-[92vh]"
       role="region"
       aria-roledescription="carousel"
       aria-label="Clinic highlights"
@@ -77,43 +77,53 @@ export default function HeroSlider() {
           }`}
           aria-hidden={i !== active}
         >
+          {/* Full Screen High-Res Image Display */}
+          <div className="relative h-full w-full">
+            <Image
+              src={slideImages[i % slideImages.length]}
+              alt={slide.headline || "Clinic banner"}
+              fill
+              priority={i === 0}
+              className="object-cover object-center w-full h-full"
+              sizes="100vw"
+            />
+          </div>
+
+          {/* Decorative geometric pattern */}
           <div
-            className={`absolute inset-0 ${i === active ? "animate-kenBurns" : ""}`}
-            style={{ background: slideGradients[i % slideGradients.length] }}
-          />
-          {/* decorative geometric pattern layer, purely CSS */}
-          <div
-            className="absolute inset-0 opacity-[0.12]"
+            className="absolute inset-0 opacity-[0.08]"
             style={{
               backgroundImage:
                 "radial-gradient(circle at 20% 20%, white 1px, transparent 1px), radial-gradient(circle at 80% 60%, white 1px, transparent 1px)",
               backgroundSize: "48px 48px, 64px 64px",
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-navyDeep/70 via-navyDeep/35 to-navyDeep/10" />
+
+          {/* Contrast overlay so text is readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-navyDeep/90 via-navyDeep/50 to-transparent md:from-navyDeep/80" />
         </div>
       ))}
 
-      {/* content overlay - re-keyed per active slide so animation replays */}
-      <div className="section relative z-20 flex h-full flex-col items-start justify-center">
-        <div key={active} className="max-w-xl">
+      {/* Content overlay */}
+      <div className="section relative z-20 flex h-full flex-col items-start justify-center px-6 md:px-12">
+        <div key={active} className="max-w-2xl">
           <p className="mb-4 animate-fadeUp text-xs font-semibold uppercase tracking-[0.2em] text-skyLight">
             {heroSlides[active].eyebrow}
           </p>
           <h1
-            className="animate-fadeUp text-[2.1rem] font-bold leading-[1.15] text-white md:text-5xl"
+            className="animate-fadeUp text-3xl font-bold leading-tight text-white sm:text-4xl md:text-6xl"
             style={{ animationDelay: "120ms" }}
           >
             {heroSlides[active].headline}
           </h1>
           <p
-            className="mt-4 animate-fadeUp text-lg text-skyLight/90"
+            className="mt-4 max-w-xl animate-fadeUp text-base text-skyLight/95 sm:text-lg md:text-xl"
             style={{ animationDelay: "260ms" }}
           >
             {heroSlides[active].subline}
           </p>
           <div
-            className="mt-8 flex animate-fadeUp flex-wrap gap-3"
+            className="mt-8 flex animate-fadeUp flex-wrap gap-4"
             style={{ animationDelay: "400ms" }}
           >
             <a href={clinic.phoneHref} className="btn-primary pulse-btn">
@@ -128,7 +138,9 @@ export default function HeroSlider() {
               📲 WhatsApp Appointment
             </a>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(clinic.mapsQuery)}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                clinic.mapsQuery
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline-white"
@@ -139,41 +151,56 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* arrows */}
+      {/* Navigation Arrows */}
       <button
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-white/15 p-2.5 text-white backdrop-blur-sm transition-colors hover:bg-white/30 md:flex"
+        className="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/30 p-3 text-white backdrop-blur-md transition-all hover:bg-black/50 md:flex"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M15 6l-6 6 6 6"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
       <button
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-white/15 p-2.5 text-white backdrop-blur-sm transition-colors hover:bg-white/30 md:flex"
+        className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-black/30 p-3 text-white backdrop-blur-md transition-all hover:bg-black/50 md:flex"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
 
-      {/* dots + progress */}
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+      {/* Dots + progress */}
+      <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
         {heroSlides.map((s, i) => (
           <button
             key={s.id}
             onClick={() => goTo(i)}
             aria-label={`Go to slide ${i + 1}`}
             aria-current={i === active}
-            className="group relative h-1.5 w-8 overflow-hidden rounded-full bg-white/30"
+            className="group relative h-2 w-10 overflow-hidden rounded-full bg-white/40"
           >
             {i === active && (
               <span
                 key={active}
                 className="absolute inset-y-0 left-0 origin-left animate-growLine rounded-full bg-white"
-                style={{ animationDuration: `${AUTOPLAY_MS}ms`, width: "100%" }}
+                style={{
+                  animationDuration: `${AUTOPLAY_MS}ms`,
+                  width: "100%",
+                }}
               />
             )}
           </button>
