@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const education = [
   { year: "2011", item: "Bachelor of Physiotherapy (BPT)" },
-  { year: "2013", item: "Master of Physiotherapy (MPT) — Orthopaedics" },
+  // { year: "2013", item: "Master of Physiotherapy (MPT) — Orthopaedics" },
   { year: "2015", item: "Certification in Chiropractic Spinal Manipulation" },
   { year: "2018", item: "Advanced Training in Dry Needling & Trigger Point Therapy" },
   { year: "2021", item: "Certified Neurological Rehabilitation Practitioner" },
